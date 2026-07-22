@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EarnPulse - Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:url('https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200') center/cover no-repeat;
+position:relative;
+}
+
+body::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.55);
+}
+
+.login-box{
+position:relative;
+z-index:1;
+width:90%;
+max-width:400px;
+padding:35px;
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(15px);
+border-radius:20px;
+text-align:center;
+}
+
+h1{
+color:#fff;
+margin-bottom:10px;
+}
+
+p{
+color:#ddd;
+margin-bottom:25px;
+}
+
+input{
+width:100%;
+padding:15px;
+margin:10px 0;
+border:none;
+border-radius:12px;
+font-size:15px;
+outline:none;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+background:#00e676;
+color:#000;
+font-size:16px;
+font-weight:700;
+border:none;
+border-radius:12px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#00c853;
+}
+
+.register{
+margin-top:20px;
+color:#fff;
+}
+
+.register a{
+color:#00e676;
+text-decoration:none;
+font-weight:600;
+}
+</style>
+
+</head>
+<body>
+
+<div class="login-box">
+
+<h1>Welcome Back</h1>
+
+<p>Login to continue earning with EarnPulse.</p>
+
+<form action="dashboard.html">
+
+<input type="email" placeholder="Email Address" required>
+
+<input type="password" placeholder="Password" required>
+
+<button type="submit">Login</button>
+
+</form>
+
+<div class="register">
+Don't have an account?
+<a href="register.html">Register</a>
+</div>
+
+</div>
+
+</body>
+</html>
