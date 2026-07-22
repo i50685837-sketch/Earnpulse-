@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EarnPulse - Settings</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:url('https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1600') center/cover fixed no-repeat;
+min-height:100vh;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.65);
+}
+
+.container{
+position:relative;
+z-index:1;
+max-width:600px;
+margin:30px auto;
+padding:20px;
+}
+
+.card{
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(15px);
+border-radius:20px;
+padding:25px;
+color:#fff;
+}
+
+.logo{
+text-align:center;
+font-size:32px;
+font-weight:700;
+color:#00e676;
+margin-bottom:20px;
+}
+
+.profile{
+text-align:center;
+margin-bottom:25px;
+}
+
+.avatar{
+width:90px;
+height:90px;
+border-radius:50%;
+background:#00e676;
+color:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:35px;
+font-weight:bold;
+margin:auto;
+}
+
+.profile h2{
+margin-top:10px;
+}
+
+.option{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(255,255,255,.12);
+padding:16px;
+border-radius:15px;
+margin:12px 0;
+}
+
+.option span{
+font-weight:600;
+}
+
+button{
+border:none;
+padding:10px 20px;
+border-radius:20px;
+background:#00e676;
+font-weight:700;
+cursor:pointer;
+}
+
+.toggle{
+width:45px;
+height:25px;
+background:#777;
+border-radius:20px;
+position:relative;
+cursor:pointer;
+}
+
+.toggle::after{
+content:"";
+width:21px;
+height:21px;
+background:white;
+border-radius:50%;
+position:absolute;
+top:2px;
+left:3px;
+transition:.3s;
+}
+
+.toggle.active{
+background:#00e676;
+}
+
+.toggle.active::after{
+left:21px;
+}
+
+.logout{
+width:100%;
+margin-top:20px;
+padding:15px;
+border-radius:30px;
+background:#ff5252;
+color:#fff;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<div class="logo">
+EarnPulse
+</div>
+
+<div class="profile">
+
+<div class="avatar">
+M
+</div>
+
+<h2>Mordecai</h2>
+<p style="color:#ddd;">Premium Member</p>
+
+</div>
+
+
+<div class="option">
+<span>👤 Edit Profile</span>
+<button>Open</button>
+</div>
+
+
+<div class="option">
+<span>🔒 Change Password</span>
+<button>Open</button>
+</div>
+
+
+<div class="option">
+<span>🔔 Notifications</span>
+<div class="toggle active"></div>
+</div>
+
+
+<div class="option">
+<span>🌙 Dark Mode</span>
+<div class="toggle"></div>
+</div>
+
+
+<div class="option">
+<span>🌍 Language</span>
+<button>English</button>
+</div>
+
+
+<div class="option">
+<span>🛡️ Account Security</span>
+<button>Manage</button>
+</div>
+
+
+<div class="option">
+<span>💳 Payment Settings</span>
+<button>Open</button>
+</div>
+
+
+<div class="option">
+<span>📱 App Version</span>
+<span>1.0.0</span>
+</div>
+
+
+<button class="logout">
+🚪 Logout
+</button>
+
+
+</div>
+
+</div>
+
+
+<script>
+
+document.querySelectorAll(".toggle").forEach(toggle=>{
+
+toggle.onclick=function(){
+
+this.classList.toggle("active");
+
+}
+
+});
+
+</script>
+
+
+</body>
+  </html>
