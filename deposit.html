@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EarnPulse - Deposit</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:url('https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1600') center/cover fixed no-repeat;
+min-height:100vh;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.65);
+}
+
+.container{
+position:relative;
+z-index:1;
+max-width:500px;
+margin:30px auto;
+padding:20px;
+}
+
+.card{
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(15px);
+border-radius:20px;
+padding:25px;
+color:#fff;
+}
+
+.logo{
+text-align:center;
+font-size:34px;
+font-weight:700;
+color:#00e676;
+margin-bottom:10px;
+}
+
+.subtitle{
+text-align:center;
+color:#ddd;
+margin-bottom:25px;
+}
+
+.balance{
+background:rgba(255,255,255,.12);
+padding:18px;
+border-radius:15px;
+text-align:center;
+margin-bottom:20px;
+}
+
+.balance h1{
+color:#00e676;
+font-size:35px;
+margin-top:8px;
+}
+
+label{
+display:block;
+margin:15px 0 8px;
+font-weight:600;
+}
+
+input,select{
+width:100%;
+padding:14px;
+border:none;
+outline:none;
+border-radius:12px;
+font-size:16px;
+}
+
+button{
+width:100%;
+margin-top:20px;
+padding:15px;
+border:none;
+border-radius:30px;
+background:#00e676;
+color:#000;
+font-size:17px;
+font-weight:700;
+cursor:pointer;
+}
+
+.methods{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+margin-top:20px;
+}
+
+.method{
+background:rgba(255,255,255,.12);
+padding:15px;
+border-radius:15px;
+text-align:center;
+}
+
+.note{
+margin-top:20px;
+padding:15px;
+background:rgba(255,255,255,.10);
+border-radius:12px;
+font-size:14px;
+color:#ddd;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<div class="logo">EarnPulse</div>
+
+<p class="subtitle">Deposit Funds</p>
+
+<div class="balance">
+<p>Wallet Balance</p>
+<h1>KES 0.00</h1>
+</div>
+
+<label>Deposit Method</label>
+
+<select>
+<option>M-PESA</option>
+<option>Bank Transfer</option>
+<option>Airtel Money</option>
+</select>
+
+<label>Phone Number</label>
+
+<input type="tel" placeholder="07XXXXXXXX">
+
+<label>Amount (KES)</label>
+
+<input type="number" placeholder="Enter amount">
+
+<button>Deposit Now</button>
+
+<div class="methods">
+
+<div class="method">
+📱<br><b>M-PESA</b>
+</div>
+
+<div class="method">
+🏦<br><b>Bank</b>
+</div>
+
+<div class="method">
+💳<br><b>Card</b>
+</div>
+
+<div class="method">
+📲<br><b>Airtel Money</b>
+</div>
+
+</div>
+
+<div class="note">
+<b>Note:</b><br>
+• Minimum Deposit: <b>KES 100</b><br>
+• Deposits are processed securely.<br>
+• Your wallet balance will update after confirmation.
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
