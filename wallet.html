@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EarnPulse - Wallet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:url('https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1600') center/cover fixed no-repeat;
+min-height:100vh;
+padding:20px;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.60);
+}
+
+.container{
+position:relative;
+z-index:1;
+max-width:900px;
+margin:auto;
+}
+
+.header{
+text-align:center;
+color:#fff;
+margin-bottom:25px;
+}
+
+.wallet{
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(15px);
+border-radius:20px;
+padding:25px;
+text-align:center;
+color:#fff;
+margin-bottom:20px;
+}
+
+.wallet h1{
+font-size:40px;
+color:#00e676;
+margin:10px 0;
+}
+
+.actions{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-bottom:25px;
+}
+
+.action{
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(15px);
+padding:20px;
+border-radius:18px;
+text-align:center;
+color:#fff;
+font-weight:600;
+}
+
+.transactions{
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(15px);
+padding:20px;
+border-radius:20px;
+color:#fff;
+}
+
+.item{
+display:flex;
+justify-content:space-between;
+padding:15px 0;
+border-bottom:1px solid rgba(255,255,255,.15);
+}
+
+.credit{
+color:#00e676;
+font-weight:bold;
+}
+
+.debit{
+color:#ff5252;
+font-weight:bold;
+}
+
+button{
+width:100%;
+margin-top:20px;
+padding:15px;
+border:none;
+border-radius:30px;
+background:#00e676;
+color:#000;
+font-size:17px;
+font-weight:700;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>💰 EarnPulse Wallet</h1>
+<p style="color:#ddd;">Manage your earnings securely.</p>
+</div>
+
+<div class="wallet">
+<p>Available Balance</p>
+<h1>KES 2,450</h1>
+<p>Minimum Withdrawal: KES 500</p>
+</div>
+
+<div class="actions">
+<div class="action">💸 Withdraw</div>
+<div class="action">🎁 Rewards</div>
+<div class="action">👥 Referrals</div>
+<div class="action">📊 Earnings</div>
+</div>
+
+<div class="transactions">
+
+<h2 style="margin-bottom:15px;">Transaction History</h2>
+
+<div class="item">
+<span>Technology Survey</span>
+<span class="credit">+KES 250</span>
+</div>
+
+<div class="item">
+<span>Shopping Survey</span>
+<span class="credit">+KES 50</span>
+</div>
+
+<div class="item">
+<span>Referral Bonus</span>
+<span class="credit">+KES 150</span>
+</div>
+
+<div class="item">
+<span>Withdrawal</span>
+<span class="debit">-KES 500</span>
+</div>
+
+<div class="item">
+<span>Daily Login Bonus</span>
+<span class="credit">+KES 20</span>
+</div>
+
+<button>Withdraw to M-PESA</button>
+
+</div>
+
+</div>
+
+</body>
+</html>
