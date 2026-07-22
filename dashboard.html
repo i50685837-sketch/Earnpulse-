@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EarnPulse Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:url('https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1600') center/cover no-repeat fixed;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.60);
+}
+
+.sidebar{
+position:fixed;
+top:0;
+left:-270px;
+width:260px;
+height:100%;
+background:rgba(15,15,15,.92);
+backdrop-filter:blur(20px);
+padding:25px;
+transition:.35s;
+z-index:1000;
+overflow-y:auto;
+}
+
+.sidebar.active{
+left:0;
+}
+
+.logo{
+font-size:30px;
+font-weight:700;
+color:#00e676;
+text-align:center;
+margin-bottom:25px;
+}
+
+.sidebar a{
+display:block;
+padding:14px;
+margin:8px 0;
+color:#fff;
+text-decoration:none;
+border-radius:12px;
+transition:.3s;
+}
+
+.sidebar a:hover{
+background:#00e676;
+color:#000;
+}
+
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.5);
+display:none;
+z-index:999;
+}
+
+.overlay.active{
+display:block;
+}
+
+.main{
+position:relative;
+z-index:2;
+padding:20px;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.menu-btn{
+font-size:30px;
+color:#fff;
+cursor:pointer;
+}
+
+.profile{
+width:50px;
+height:50px;
+background:#00e676;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:22px;
+font-weight:bold;
+}
+
+.balance{
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(18px);
+border-radius:20px;
+padding:25px;
+color:#fff;
+margin-top:10px;
+}
+
+.balance h3{
+font-weight:400;
+}
+
+.balance h1{
+font-size:40px;
+margin:10px 0;
+color:#00e676;
+}
+
+.balance p{
+color:#ddd;
+}
+
+.quick{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-top:20px;
+}
+
+.quick div{
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(15px);
+padding:18px;
+border-radius:18px;
+text-align:center;
+color:#fff;
+font-weight:600;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="sidebar" id="sidebar">
+
+<div class="logo">EarnPulse</div>
+
+<a href="#">🏠 Dashboard</a>
+<a href="survey.html">📋 Available Surveys</a>
+<a href="wallet.html">💰 Wallet</a>
+<a href="wallet.html">⬇ Deposit</a>
+<a href="wallet.html">⬆ Withdraw</a>
+<a href="rewards.html">🎁 Rewards</a>
+<a href="history.html">📜 History</a>
+<a href="profile.html">👤 Account Info</a>
+<a href="settings.html">⚙ Settings</a>
+<a href="about.html">ℹ About</a>
+<a href="contact.html">☎ Contact</a>
+<a href="login.html">🚪 Logout</a>
+
+</div>
+
+<div class="main">
+
+<div class="topbar">
+
+<div class="menu-btn" onclick="openMenu()">☰</div>
+
+<div class="profile">M</div>
+
+</div>
+
+<div class="balance">
+
+<h3>Available Balance</h3>
+
+<h1>KES 0.00</h1>
+
+<p>Complete surveys and earn real rewards with EarnPulse.</p>
+
+</div>
+
+<div class="quick">
+
+<div>💰 Wallet</div>
+
+<div>⬆ Withdraw</div>
+
+<div>🎁 Rewards</div>
+
+<div>📋 Surveys</div>
+
+</div>
+
+<h2 style="color:#fff;margin-top:30px;">Available Surveys</h2>
+
+<!-- Paste Part 2 below this line -->
+
+<script>
+
+const sidebar=document.getElementById("sidebar");
+const overlay=document.getElementById("overlay");
+
+function openMenu(){
+sidebar.classList.add("active");
+overlay.classList.add("active");
+}
+
+overlay.onclick=function(){
+sidebar.classList.remove("active");
+overlay.classList.remove("active");
+}
+
+</script>
+
+</body>
+  </html>
