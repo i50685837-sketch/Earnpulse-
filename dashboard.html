@@ -407,3 +407,159 @@ background:#00c853;
 transform:scale(1.05);
 }
 </style>
+  <!-- ===== Dashboard Footer ===== -->
+
+<footer class="footer">
+    <h2>EarnPulse</h2>
+    <p>Your Opinion • Your Rewards</p>
+    <p>© 2026 EarnPulse. All Rights Reserved.</p>
+</footer>
+
+</div>
+<!-- End .main -->
+
+<style>
+
+/* Responsive */
+
+@media(max-width:900px){
+
+.sidebar{
+width:220px;
+}
+
+.main{
+margin-left:240px;
+}
+
+.actions{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:768px){
+
+.sidebar{
+position:relative;
+width:100%;
+height:auto;
+}
+
+.main{
+margin-left:0;
+padding:15px;
+}
+
+.topbar{
+flex-direction:column;
+align-items:flex-start;
+gap:15px;
+}
+
+.actions{
+grid-template-columns:1fr;
+}
+
+.profile{
+align-self:flex-end;
+}
+
+}
+
+/* Footer */
+
+.footer{
+margin-top:40px;
+padding:30px;
+text-align:center;
+color:#fff;
+background:rgba(255,255,255,.10);
+backdrop-filter:blur(15px);
+border-radius:20px;
+}
+
+.footer h2{
+color:#00e676;
+margin-bottom:10px;
+}
+
+.footer p{
+margin:6px 0;
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar{
+width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#00e676;
+border-radius:20px;
+}
+
+::-webkit-scrollbar-track{
+background:#111;
+}
+
+</style>
+
+<script>
+
+// Highlight active menu item
+const links=document.querySelectorAll(".menu a");
+
+links.forEach(link=>{
+link.addEventListener("click",function(){
+
+links.forEach(item=>item.style.background="transparent");
+
+this.style.background="#00e676";
+this.style.color="#000";
+
+});
+});
+
+// Quick Action Buttons
+document.querySelectorAll(".action").forEach(button=>{
+
+button.addEventListener("click",()=>{
+
+const text=button.innerText;
+
+if(text.includes("Wallet")){
+window.location="wallet.html";
+}
+
+if(text.includes("Withdraw")){
+window.location="wallet.html";
+}
+
+if(text.includes("Rewards")){
+window.location="rewards.html";
+}
+
+if(text.includes("Surveys")){
+window.location="survey.html";
+}
+
+});
+
+});
+
+// Survey Buttons
+document.querySelectorAll(".survey-card button").forEach(button=>{
+
+button.addEventListener("click",()=>{
+
+window.location="survey.html";
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
