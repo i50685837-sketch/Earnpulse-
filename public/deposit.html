@@ -1,0 +1,293 @@
+Deposit.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deposit - EarnPesa</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f1f5f9;
+  min-height:100vh;
+  color:#0f172a;
+}
+
+.header{
+  background:linear-gradient(135deg,#16a34a,#059669);
+  color:white;
+  padding:22px 20px;
+  border-radius:0 0 25px 25px;
+}
+
+.header h1{
+  font-size:25px;
+}
+
+.header p{
+  margin-top:6px;
+  opacity:.9;
+}
+
+.container{
+  max-width:500px;
+  margin:25px auto;
+  padding:0 18px;
+}
+
+.card{
+  background:white;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
+  margin-bottom:20px;
+}
+
+.balance{
+  background:#ecfdf5;
+  border:1px solid #bbf7d0;
+  text-align:center;
+}
+
+.balance small{
+  color:#64748b;
+}
+
+.balance h2{
+  color:#059669;
+  margin-top:8px;
+}
+
+label{
+  display:block;
+  font-weight:bold;
+  margin:15px 0 8px;
+}
+
+input,select{
+  width:100%;
+  padding:14px;
+  border:1px solid #cbd5e1;
+  border-radius:12px;
+  outline:none;
+  font-size:16px;
+}
+
+input:focus,select:focus{
+  border-color:#10b981;
+}
+
+.quick{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:10px;
+}
+
+.quick button{
+  padding:10px;
+  border:1px solid #bbf7d0;
+  background:#f0fdf4;
+  color:#047857;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.deposit-btn{
+  width:100%;
+  margin-top:20px;
+  padding:15px;
+  border:0;
+  border-radius:13px;
+  background:linear-gradient(135deg,#16a34a,#059669);
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.deposit-btn:disabled{
+  opacity:.6;
+}
+
+.info{
+  margin-top:15px;
+  padding:13px;
+  background:#f8fafc;
+  border-radius:12px;
+  font-size:14px;
+  color:#64748b;
+}
+
+.status{
+  display:none;
+  margin-top:15px;
+  padding:13px;
+  border-radius:12px;
+  text-align:center;
+  font-weight:bold;
+}
+
+.success{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.error{
+  background:#fee2e2;
+  color:#991b1b;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>💰 Deposit</h1>
+  <p>Add funds to your EarnPesa wallet</p>
+</div>
+
+<div class="container">
+
+  <div class="card balance">
+    <small>Current Wallet Balance</small>
+    <h2>KES <span id="balance">0.00</span></h2>
+  </div>
+
+  <div class="card">
+
+    <label for="amount">Deposit Amount</label>
+
+    <input
+      type="number"
+      id="amount"
+      placeholder="Enter amount"
+      min="10"
+      step="1"
+    >
+
+    <div class="quick">
+      <button onclick="setAmount(100)">KES 100</button>
+      <button onclick="setAmount(500)">KES 500</button>
+      <button onclick="setAmount(1000)">KES 1,000</button>
+    </div>
+
+    <label for="method">Payment Method</label>
+
+    <select id="method">
+      <option value="mpesa">M-Pesa</option>
+    </select>
+
+    <label for="phone">M-Pesa Phone Number</label>
+
+    <input
+      type="tel"
+      id="phone"
+      placeholder="07XXXXXXXX"
+      maxlength="12"
+    >
+
+    <div class="info">
+      📱 Enter the M-Pesa number that will receive the payment request.
+      Your backend should initiate the payment securely.
+    </div>
+
+    <button class="deposit-btn" id="depositBtn" onclick="deposit()">
+      Deposit via M-Pesa
+    </button>
+
+    <div id="status" class="status"></div>
+
+  </div>
+
+</div>
+
+<script>
+
+function setAmount(amount){
+  document.getElementById("amount").value = amount;
+}
+
+async function deposit(){
+
+  const amount = Number(document.getElementById("amount").value);
+  const phone = document.getElementById("phone").value.trim();
+  const btn = document.getElementById("depositBtn");
+  const status = document.getElementById("status");
+
+  status.style.display = "none";
+
+  if(!amount || amount < 10){
+    showStatus("Minimum deposit is KES 10.", "error");
+    return;
+  }
+
+  if(!/^07\\d{8}$/.test(phone) && !/^2547\\d{8}$/.test(phone)){
+    showStatus("Enter a valid Kenyan M-Pesa phone number.", "error");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Processing...";
+
+  try{
+
+    const response = await fetch("/api/deposit",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        amount:amount,
+        phone:phone,
+        method:"mpesa"
+      })
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error(data.message || "Deposit request failed");
+    }
+
+    showStatus(
+      data.message || "Deposit request sent successfully.",
+      "success"
+    );
+
+  }catch(error){
+
+    showStatus(
+      error.message || "Unable to connect to the server.",
+      "error"
+    );
+
+  }finally{
+
+    btn.disabled = false;
+    btn.textContent = "Deposit via M-Pesa";
+
+  }
+}
+
+function showStatus(message,type){
+
+  const status = document.getElementById("status");
+
+  status.textContent = message;
+  status.className = "status " + type;
+  status.style.display = "block";
+}
+
+</script>
+
+</body>
+        </html>
