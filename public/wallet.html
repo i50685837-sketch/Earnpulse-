@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#f4f7fb;color:#172033}
+.header{
+  background:linear-gradient(135deg,#087f5b,#12b886);
+  color:#fff;padding:25px 20px;border-radius:0 0 25px 25px
+}
+.header h1{font-size:26px}
+.header p{margin-top:7px;opacity:.9}
+
+.balance{
+  margin:20px;background:#fff;border-radius:18px;padding:22px;
+  box-shadow:0 5px 20px #00000012
+}
+.balance span{color:#718096;font-size:14px}
+.balance h2{font-size:32px;margin-top:8px;color:#087f5b}
+
+.cards{
+  display:grid;grid-template-columns:1fr 1fr;gap:15px;
+  padding:0 20px
+}
+.card{
+  background:#fff;border-radius:18px;padding:20px;text-align:center;
+  box-shadow:0 5px 20px #00000010
+}
+.card button{
+  width:100%;border:0;border-radius:12px;padding:13px;
+  margin-top:12px;color:#fff;font-weight:bold;cursor:pointer
+}
+.deposit{background:#087f5b}
+.withdraw{background:#343a40}
+
+.info{
+  margin:20px;background:#e7f8f1;padding:16px;border-radius:15px;
+  color:#075c43;font-size:14px;line-height:1.5
+}
+
+.modal{
+  display:none;position:fixed;inset:0;background:#0008;
+  align-items:center;justify-content:center;padding:20px
+}
+.box{
+  background:#fff;width:100%;max-width:400px;border-radius:20px;
+  padding:25px
+}
+.box h2{margin-bottom:15px}
+.box input{
+  width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;
+  margin:8px 0 14px;font-size:16px
+}
+.box button{
+  width:100%;padding:14px;border:0;border-radius:10px;
+  background:#087f5b;color:#fff;font-weight:bold
+}
+.close{
+  background:#eee!important;color:#333!important;margin-top:8px
+}
+.message{
+  margin-top:12px;font-size:14px;text-align:center
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>💰 My Wallet</h1>
+  <p>Manage your deposits and withdrawals</p>
+</div>
+
+<div class="balance">
+  <span>Available Balance</span>
+  <h2 id="balance">KES 0.00</h2>
+</div>
+
+<div class="cards">
+
+  <div class="card">
+    <div style="font-size:35px">📥</div>
+    <h3>Deposit</h3>
+    <p style="font-size:13px;color:#718096;margin-top:5px">
+      Activate with KES 150+
+    </p>
+    <button class="deposit" onclick="openDeposit()">Deposit</button>
+  </div>
+
+  <div class="card">
+    <div style="font-size:35px">📤</div>
+    <h3>Withdraw</h3>
+    <p style="font-size:13px;color:#718096;margin-top:5px">
+      Withdraw available funds
+    </p>
+    <button class="withdraw" onclick="openWithdraw()">Withdraw</button>
+  </div>
+
+</div>
+
+<div class="info">
+  <b>📱 Registered M-Pesa</b><br>
+  Deposits and withdrawals will use the phone number connected to your
+  account. Keep your registered number active to receive payment prompts.
+</div>
+
+<!-- DEPOSIT MODAL -->
+<div class="modal" id="depositModal">
+  <div class="box">
+    <h2>📥 Deposit Funds</h2>
+    <p style="font-size:14px;color:#666">
+      Minimum deposit is KES 150.
+    </p>
+
+    <input
+      type="number"
+      id="depositAmount"
+      min="150"
+      placeholder="Enter amount (KES)"
+    >
+
+    <button onclick="deposit()">Continue to M-Pesa</button>
+    <button class="close" onclick="closeModals()">Cancel</button>
+
+    <div class="message" id="depositMessage"></div>
+  </div>
+</div>
+
+<!-- WITHDRAW MODAL -->
+<div class="modal" id="withdrawModal">
+  <div class="box">
+    <h2>📤 Withdraw Funds</h2>
+
+    <input
+      type="number"
+      id="withdrawAmount"
+      placeholder="Enter amount (KES)"
+    >
+
+    <button onclick="withdraw()">Request Withdrawal</button>
+    <button class="close" onclick="closeModals()">Cancel</button>
+
+    <div class="message" id="withdrawMessage"></div>
+  </div>
+</div>
+
+<script>
+let balance = Number(localStorage.getItem("walletBalance") || 0);
+
+function displayBalance(){
+  document.getElementById("balance").textContent =
+    "KES " + balance.toLocaleString("en-KE", {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    });
+}
+
+function openDeposit(){
+  document.getElementById("depositModal").style.display="flex";
+}
+
+function openWithdraw(){
+  document.getElementById("withdrawModal").style.display="flex";
+}
+
+function closeModals(){
+  document.getElementById("depositModal").style.display="none";
+  document.getElementById("withdrawModal").style.display="none";
+}
+
+async function deposit(){
+
+  const amount = Number(
+    document.getElementById("depositAmount").value
+  );
+
+  const message = document.getElementById("depositMessage");
+
+  if(!amount || amount < 150){
+    message.textContent = "Minimum deposit is KES 150.";
+    message.style.color = "red";
+    return;
+  }
+
+  message.textContent = "Processing M-Pesa prompt...";
+  message.style.color = "#087f5b";
+
+  try{
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("/api/payments/deposit",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        ...(token ? {"Authorization":"Bearer "+token} : {})
+      },
+      body:JSON.stringify({amount})
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error(data.message || "Deposit request failed");
+    }
+
+    message.textContent =
+      data.message || "Check your phone for the M-Pesa prompt.";
+
+  }catch(error){
+
+    message.textContent = error.message;
+    message.style.color="red";
+  }
+}
+
+async function withdraw(){
+
+  const amount = Number(
+    document.getElementById("withdrawAmount").value
+  );
+
+  const message = document.getElementById("withdrawMessage");
+
+  if(!amount || amount <= 0){
+    message.textContent="Enter a valid withdrawal amount.";
+    message.style.color="red";
+    return;
+  }
+
+  if(amount > balance){
+    message.textContent="Insufficient wallet balance.";
+    message.style.color="red";
+    return;
+  }
+
+  message.textContent="Submitting withdrawal request...";
+  message.style.color="#087f5b";
+
+  try{
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("/api/payments/withdraw",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        ...(token ? {"Authorization":"Bearer "+token} : {})
+      },
+      body:JSON.stringify({amount})
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error(data.message || "Withdrawal failed");
+    }
+
+    message.textContent =
+      data.message || "Withdrawal request submitted.";
+
+  }catch(error){
+
+    message.textContent=error.message;
+    message.style.color="red";
+  }
+}
+
+displayBalance();
+</script>
+
+</body>
+      </html>
