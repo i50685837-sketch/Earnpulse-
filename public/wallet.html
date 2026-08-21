@@ -192,7 +192,7 @@ async function deposit(){
 
     const token = localStorage.getItem("token");
 
-    const response = await fetch("/api/payments/deposit",{
+    const response = await fetch("/api/payment/stkpush",{
       method:"POST",
       headers:{
         "Content-Type":"application/json",
