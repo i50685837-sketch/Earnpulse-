@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet - EarnPulse</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f4f7fb;color:#172033}
+.header{
+  background:linear-gradient(135deg,#2563eb,#4f46e5);
+  color:white;padding:22px 18px 30px;
+}
+.header h2{font-size:24px}
+.header p{margin-top:6px;opacity:.85}
+
+.container{max-width:650px;margin:-15px auto 30px;padding:0 15px}
+
+.balance{
+  background:white;border-radius:18px;padding:24px;
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
+  text-align:center;margin-bottom:18px
+}
+.balance span{font-size:14px;color:#718096}
+.balance h1{font-size:35px;margin:8px 0;color:#2563eb}
+.balance small{color:#64748b}
+
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.btn{
+  border:0;border-radius:14px;padding:16px;
+  color:white;font-size:16px;font-weight:bold;cursor:pointer
+}
+.deposit{background:#16a34a}
+.withdraw{background:#dc2626}
+
+.card{
+  background:white;border-radius:18px;padding:20px;
+  margin-bottom:18px;box-shadow:0 5px 20px rgba(0,0,0,.06)
+}
+.card h3{margin-bottom:15px}
+.transaction{
+  display:flex;justify-content:space-between;
+  padding:14px 0;border-bottom:1px solid #edf0f5
+}
+.transaction:last-child{border-bottom:0}
+.deposit-text{color:#16a34a}
+.withdraw-text{color:#dc2626}
+.empty{text-align:center;color:#94a3b8;padding:20px}
+
+.modal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);
+  align-items:center;justify-content:center;padding:20px
+}
+.modal-box{
+  background:white;width:100%;max-width:400px;
+  border-radius:18px;padding:24px
+}
+.modal-box h3{margin-bottom:15px}
+input{
+  width:100%;padding:14px;border:1px solid #dbe1ea;
+  border-radius:10px;margin-bottom:12px;font-size:16px
+}
+.submit{
+  width:100%;padding:14px;border:0;border-radius:10px;
+  background:#2563eb;color:white;font-weight:bold;font-size:16px
+}
+.close{
+  float:right;border:0;background:none;font-size:24px;
+  cursor:pointer
+}
+.note{font-size:13px;color:#64748b;margin-top:10px}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <h2>💰 My Wallet</h2>
+  <p>Manage your EarnPulse funds</p>
+</header>
+
+<div class="container">
+
+  <div class="balance">
+    <span>Available Balance</span>
+    <h1 id="balance">KES 0.00</h1>
+    <small>EarnPulse Wallet</small>
+  </div>
+
+  <div class="actions">
+    <button class="btn deposit" onclick="openModal('deposit')">
+      ➕ Deposit
+    </button>
+
+    <button class="btn withdraw" onclick="openModal('withdraw')">
+      💸 Withdraw
+    </button>
+  </div>
+
+  <div class="card">
+    <h3>Wallet Summary</h3>
+
+    <div class="transaction">
+      <span>Total Deposits</span>
+      <strong id="deposits">KES 0.00</strong>
+    </div>
+
+    <div class="transaction">
+      <span>Total Withdrawals</span>
+      <strong id="withdrawals">KES 0.00</strong>
+    </div>
+
+    <div class="transaction">
+      <span>Rewards</span>
+      <strong id="rewards">KES 0.00</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Recent Transactions</h3>
+    <div id="transactions">
+      <div class="empty">No transactions yet</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal()">×</button>
+
+    <h3 id="modalTitle">Deposit Funds</h3>
+
+    <input
+      type="number"
+      id="amount"
+      placeholder="Enter amount in KES"
+      min="1"
+    >
+
+    <button class="submit" onclick="submitTransaction()">
+      Continue
+    </button>
+
+    <p class="note">
+      Transactions are processed through the connected wallet/payment backend.
+    </p>
+  </div>
+</div>
+
+<script>
+let currentAction = "";
+
+function getWallet(){
+  return JSON.parse(localStorage.getItem("wallet")) || {
+    balance:0,
+    deposits:0,
+    withdrawals:0,
+    rewards:0,
+    transactions:[]
+  };
+}
+
+function saveWallet(wallet){
+  localStorage.setItem("wallet",JSON.stringify(wallet));
+}
+
+function updateUI(){
+
+  const wallet = getWallet();
+
+  document.getElementById("balance").textContent =
+    "KES " + wallet.balance.toFixed(2);
+
+  document.getElementById("deposits").textContent =
+    "KES " + wallet.deposits.toFixed(2);
+
+  document.getElementById("withdrawals").textContent =
+    "KES " + wallet.withdrawals.toFixed(2);
+
+  document.getElementById("rewards").textContent =
+    "KES " + wallet.rewards.toFixed(2);
+
+  const box = document.getElementById("transactions");
+
+  if(wallet.transactions.length === 0){
+    box.innerHTML = '<div class="empty">No transactions yet</div>';
+    return;
+  }
+
+  box.innerHTML = wallet.transactions
+    .slice(0,10)
+    .map(t => `
+      <div class="transaction">
+        <div>
+          <strong>${t.type}</strong><br>
+          <small>${t.date}</small>
+        </div>
+        <strong class="${t.type === 'Deposit' ? 'deposit-text':'withdraw-text'}">
+          ${t.type === 'Deposit' ? '+' : '-'}KES ${t.amount.toFixed(2)}
+        </strong>
+      </div>
+    `).join("");
+}
+
+function openModal(action){
+
+  currentAction = action;
+
+  document.getElementById("modal").style.display = "flex";
+
+  document.getElementById("modalTitle").textContent =
+    action === "deposit"
+      ? "Deposit Funds"
+      : "Withdraw Funds";
+
+  document.getElementById("amount").value = "";
+}
+
+function closeModal(){
+  document.getElementById("modal").style.display = "none";
+}
+
+function submitTransaction(){
+
+  const amount = Number(document.getElementById("amount").value);
+
+  if(!amount || amount <= 0){
+    alert("Enter a valid amount.");
+    return;
+  }
+
+  const wallet = getWallet();
+
+  if(currentAction === "withdraw"){
+
+    if(amount > wallet.balance){
+      alert("Insufficient wallet balance.");
+      return;
+    }
+
+    wallet.balance -= amount;
+    wallet.withdrawals += amount;
+
+    wallet.transactions.unshift({
+      type:"Withdrawal",
+      amount:amount,
+      date:new Date().toLocaleString()
+    });
+
+  }else{
+
+    wallet.balance += amount;
+    wallet.deposits += amount;
+
+    wallet.transactions.unshift({
+      type:"Deposit",
+      amount:amount,
+      date:new Date().toLocaleString()
+    });
+  }
+
+  saveWallet(wallet);
+  updateUI();
+  closeModal();
+
+  alert(
+    currentAction === "deposit"
+      ? "Deposit recorded successfully."
+      : "Withdrawal request recorded successfully."
+  );
+}
+
+updateUI();
+</script>
+
+</body>
+</html>
