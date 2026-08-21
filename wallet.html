@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>EarnPulse • Wallet</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Inter,Arial,sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top right,#19c97855,transparent 35%),
+    linear-gradient(135deg,#04120e,#0a2a20);
+  color:#fff;
+}
+
+.container{
+  width:100%;
+  max-width:520px;
+  margin:auto;
+  padding:18px;
+}
+
+/* HEADER */
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.header h1{
+  font-size:22px;
+}
+
+.icon{
+  width:42px;
+  height:42px;
+  border:1px solid #ffffff18;
+  border-radius:14px;
+  background:#ffffff0b;
+  color:#fff;
+  font-size:21px;
+  cursor:pointer;
+}
+
+/* BALANCE */
+
+.balance-card{
+  padding:24px;
+  border-radius:25px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #19b96d,
+      #087443
+    );
+
+  box-shadow:
+    0 18px 45px #0005;
+
+  margin-bottom:16px;
+}
+
+.balance-card small{
+  color:#d0f5e3;
+}
+
+.balance{
+  font-size:34px;
+  font-weight:800;
+  margin:7px 0;
+}
+
+.balance-card p{
+  font-size:12px;
+  color:#c1ead8;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.stat{
+  padding:16px;
+  border-radius:18px;
+  background:#ffffff0b;
+  border:1px solid #ffffff15;
+}
+
+.stat small{
+  color:#829e94;
+  font-size:11px;
+}
+
+.stat strong{
+  display:block;
+  margin-top:7px;
+  font-size:17px;
+}
+
+/* ACTIONS */
+
+.actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-bottom:18px;
+}
+
+.action{
+  border:1px solid #ffffff16;
+  border-radius:18px;
+  padding:15px 7px;
+
+  background:#ffffff0b;
+  color:#fff;
+
+  cursor:pointer;
+  text-align:center;
+}
+
+.action:hover{
+  border-color:#19c978;
+  background:#19c97812;
+}
+
+.action-icon{
+  font-size:23px;
+  margin-bottom:7px;
+}
+
+.action strong{
+  display:block;
+  font-size:12px;
+}
+
+.action span{
+  color:#78948a;
+  font-size:9px;
+}
+
+/* CARD */
+
+.card{
+  padding:20px;
+  border-radius:23px;
+  background:#ffffff0b;
+  border:1px solid #ffffff15;
+  margin-bottom:16px;
+}
+
+.card h3{
+  font-size:18px;
+  margin-bottom:6px;
+}
+
+.card-description{
+  color:#8da89e;
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* MPESA */
+
+.mpesa-account{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-top:16px;
+  padding:14px;
+  border-radius:16px;
+  background:#04150f;
+  border:1px solid #ffffff12;
+}
+
+.mpesa-logo{
+  width:44px;
+  height:44px;
+  border-radius:13px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#16a766;
+  font-size:10px;
+  font-weight:900;
+}
+
+.mpesa-account strong{
+  display:block;
+  font-size:14px;
+}
+
+.mpesa-account small{
+  color:#809b91;
+  font-size:11px;
+}
+
+/* STATUS BADGE */
+
+.badge{
+  margin-left:auto;
+  padding:5px 9px;
+  border-radius:20px;
+  background:#19c97818;
+  color:#62e9a5;
+  font-size:10px;
+}
+
+/* ACTIVATION */
+
+.activation{
+  margin-top:16px;
+  padding:17px;
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #19c97812,
+      #08744310
+    );
+
+  border:1px solid #19c97835;
+}
+
+.activation-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+
+.activation-top small{
+  color:#8ca69d;
+}
+
+.activation-price{
+  font-size:23px;
+  font-weight:800;
+}
+
+.activate-btn{
+  width:100%;
+  padding:15px;
+
+  border:0;
+  border-radius:14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #19c978,
+      #0c9d5b
+    );
+
+  color:#fff;
+  font-weight:800;
+  font-size:14px;
+
+  cursor:pointer;
+}
+
+.activate-btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+/* TRANSACTIONS */
+
+.transaction{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:13px 0;
+
+  border-bottom:1px solid #ffffff0d;
+}
+
+.transaction:last-child{
+  border-bottom:0;
+}
+
+.transaction-left{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.transaction-icon{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#19c97812;
+}
+
+.transaction-name{
+  font-size:13px;
+}
+
+.transaction-date{
+  display:block;
+  margin-top:3px;
+  color:#6f8980;
+  font-size:10px;
+}
+
+.transaction-amount{
+  font-size:13px;
+  font-weight:700;
+}
+
+.empty{
+  text-align:center;
+  padding:20px;
+  color:#718a81;
+  font-size:12px;
+}
+
+/* LOADING */
+
+.loading{
+  text-align:center;
+  padding:25px;
+  color:#8fa89f;
+  font-size:13px;
+}
+
+/* NAV */
+
+.bottom-nav{
+  position:sticky;
+  bottom:10px;
+
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+
+  margin-top:18px;
+  padding:8px;
+
+  background:#071b15e8;
+  border:1px solid #ffffff15;
+  border-radius:20px;
+
+  backdrop-filter:blur(18px);
+}
+
+.nav-item{
+  border:0;
+  background:none;
+  color:#78958a;
+  padding:9px 3px;
+  cursor:pointer;
+  font-size:10px;
+}
+
+.nav-item div{
+  font-size:18px;
+  margin-bottom:3px;
+}
+
+.nav-item.active{
+  color:#19c978;
+}
+
+/* FOOTER */
+
+.footer{
+  text-align:center;
+  color:#506b61;
+  font-size:10px;
+  padding:18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+
+  <div class="header">
+
+    <button
+      class="icon"
+      onclick="history.back()">
+      ‹
+    </button>
+
+    <h1>My Wallet</h1>
+
+    <button
+      class="icon"
+      onclick="loadWallet()">
+      ↻
+    </button>
+
+  </div>
+
+
+  <!-- BALANCE -->
+
+  <div class="balance-card">
+
+    <small>
+      Available Balance
+    </small>
+
+    <div
+      id="balance"
+      class="balance">
+      KES 0.00
+    </div>
+
+    <p>
+      Your current wallet balance
+    </p>
+
+  </div>
+
+
+  <!-- STATS -->
+
+  <div class="stats">
+
+    <div class="stat">
+
+      <small>
+        Total Deposits
+      </small>
+
+      <strong id="totalDeposits">
+        KES 0.00
+      </strong>
+
+    </div>
+
+    <div class="stat">
+
+      <small>
+        Total Withdrawals
+      </small>
+
+      <strong id="totalWithdrawals">
+        KES 0.00
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <!-- ACTIONS -->
+
+  <div class="actions">
+
+    <button
+      class="action"
+      onclick="location.href='deposit.html'">
+
+      <div class="action-icon">
+        ＋
+      </div>
+
+      <strong>Deposit</strong>
+
+      <span>
+        M-Pesa
+      </span>
+
+    </button>
+
+
+    <button
+      class="action"
+      onclick="activateWallet()">
+
+      <div class="action-icon">
+        ⚡
+      </div>
+
+      <strong>Activate</strong>
+
+      <span>
+        KES 150
+      </span>
+
+    </button>
+
+
+    <button
+      class="action"
+      onclick="location.href='withdraw.html'">
+
+      <div class="action-icon">
+        ↗
+      </div>
+
+      <strong>Withdraw</strong>
+
+      <span>
+        M-Pesa
+      </span>
+
+    </button>
+
+  </div>
+
+
+  <!-- M-PESA ACCOUNT -->
+
+  <div class="card">
+
+    <h3>
+      M-Pesa Account
+    </h3>
+
+    <p class="card-description">
+      This is the registered number used
+      for your M-Pesa transactions.
+    </p>
+
+    <div class="mpesa-account">
+
+      <div class="mpesa-logo">
+        M-PESA
+      </div>
+
+      <div>
+
+        <strong id="phone">
+          Loading...
+        </strong>
+
+        <small>
+          Registered payment number
+        </small>
+
+      </div>
+
+      <div
+        id="accountStatus"
+        class="badge">
+        Active
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ACTIVATION -->
+
+  <div class="card">
+
+    <h3>
+      Wallet Activation
+    </h3>
+
+    <p class="card-description">
+      Activate your wallet to unlock
+      wallet functionality.
+    </p>
+
+    <div class="activation">
+
+      <div class="activation-top">
+
+        <div>
+          <small>
+            Activation fee
+          </small>
+        </div>
+
+        <div
+          id="activationPrice"
+          class="activation-price">
+          KES 150
+        </div>
+
+      </div>
+
+      <button
+        id="activateBtn"
+        class="activate-btn"
+        onclick="activateWallet()">
+
+        Activate Wallet
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- TRANSACTIONS -->
+
+  <div class="card">
+
+    <h3>
+      Recent Transactions
+    </h3>
+
+    <div
+      id="transactions">
+
+      <div class="loading">
+        Loading transactions...
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- NAVIGATION -->
+
+  <div class="bottom-nav">
+
+    <button
+      class="nav-item"
+      onclick="location.href='dashboard.html'">
+
+      <div>⌂</div>
+      Home
+
+    </button>
+
+    <button
+      class="nav-item"
+      onclick="location.href='available-survey.html'">
+
+      <div>▤</div>
+      Surveys
+
+    </button>
+
+    <button
+      class="nav-item active">
+
+      <div>▣</div>
+      Wallet
+
+    </button>
+
+    <button
+      class="nav-item"
+      onclick="location.href='profile.html'">
+
+      <div>●</div>
+      Profile
+
+    </button>
+
+  </div>
+
+
+  <div class="footer">
+    EarnPulse • Secure Wallet
+  </div>
+
+</div>
+
+
+<script>
+
+const API_URL = "";
+
+
+/*
+|--------------------------------------------------------------------------
+| Authentication
+|--------------------------------------------------------------------------
+*/
+
+function getToken(){
+
+  return (
+    localStorage.getItem("token") ||
+    sessionStorage.getItem("token")
+  );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| API helper
+|--------------------------------------------------------------------------
+*/
+
+async function api(
+  endpoint,
+  options = {}
+){
+
+  const token =
+    getToken();
+
+  if(!token){
+
+    location.href =
+      "login.html";
+
+    throw new Error(
+      "Authentication required"
+    );
+
+  }
+
+  const response =
+    await fetch(
+      API_URL + endpoint,
+      {
+        ...options,
+
+        headers:{
+          "Content-Type":
+            "application/json",
+
+          ...(options.headers || {}),
+
+          Authorization:
+            "Bearer " + token
+        }
+      }
+    );
+
+  const data =
+    await response.json();
+
+  if(
+    response.status === 401 ||
+    response.status === 403
+  ){
+
+    localStorage.removeItem(
+      "token"
+    );
+
+    sessionStorage.removeItem(
+      "token"
+    );
+
+    location.href =
+      "login.html";
+
+    throw new Error(
+      "Session expired"
+    );
+
+  }
+
+  if(!response.ok){
+
+    throw new Error(
+      data.message ||
+      "Request failed"
+    );
+
+  }
+
+  return data;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Currency
+|--------------------------------------------------------------------------
+*/
+
+function money(value){
+
+  return (
+    "KES " +
+    Number(value || 0)
+      .toLocaleString(
+        "en-KE",
+        {
+          minimumFractionDigits:2,
+          maximumFractionDigits:2
+        }
+      )
+  );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Mask phone
+|--------------------------------------------------------------------------
+*/
+
+function maskPhone(phone){
+
+  if(!phone)
+    return "Not available";
+
+  const value =
+    String(phone);
+
+  if(value.length >= 10){
+
+    return (
+      value.substring(0,6) +
+      "****" +
+      value.substring(
+        value.length - 2
+      )
+    );
+
+  }
+
+  return value;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Load wallet
+|--------------------------------------------------------------------------
+*/
+
+async function loadWallet(){
+
+  try{
+
+    const data =
+      await api(
+        "/api/wallet"
+      );
+
+
+    /*
+     * Expected response:
+     *
+     * {
+     *   success: true,
+     *   wallet: {...},
+     *   user: {...},
+     *   transactions: [...]
+     * }
+     */
+
+
+    const wallet =
+      data.wallet || {};
+
+
+    document.getElementById(
+      "balance"
+    ).textContent =
+      money(
+        wallet.balance
+      );
+
+
+    document.getElementById(
+      "totalDeposits"
+    ).textContent =
+      money(
+        wallet.totalDeposits
+      );
+
+
+    document.getElementById(
+      "totalWithdrawals"
+    ).textContent =
+      money(
+        wallet.totalWithdrawals
+      );
+
+
+    /*
+     * Registered M-Pesa number
+     */
+
+    document.getElementById(
+      "phone"
+    ).textContent =
+      maskPhone(
+        data.user?.phone
+      );
+
+
+    /*
+     * Activation status
+     */
+
+    const activated =
+      wallet.activated === true;
+
+
+    const status =
+      document.getElementById(
+        "accountStatus"
+      );
+
+    const button =
+      document.getElementById(
+        "activateBtn"
+      );
+
+
+    if(activated){
+
+      status.textContent =
+        "Activated";
+
+      status.style.background =
+        "#19c97818";
+
+      status.style.color =
+        "#62e9a5";
+
+      button.textContent =
+        "Wallet Activated";
+
+      button.disabled = true;
+
+    }else{
+
+      status.textContent =
+        "Not Activated";
+
+      status.style.background =
+        "#ffb02018";
+
+      status.style.color =
+        "#ffd27a";
+
+      button.textContent =
+        "Activate Wallet — KES 150";
+
+      button.disabled = false;
+
+    }
+
+
+    renderTransactions(
+      data.transactions || []
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Wallet error:",
+      error
+    );
+
+    document.getElementById(
+      "transactions"
+    ).innerHTML = `
+      <div class="empty">
+        Unable to load wallet data.
+      </div>
+    `;
+
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Transactions
+|--------------------------------------------------------------------------
+*/
+
+function renderTransactions(
+  transactions
+){
+
+  const container =
+    document.getElementById(
+      "transactions"
+    );
+
+
+  if(
+    !transactions ||
+    transactions.length === 0
+  ){
+
+    container.innerHTML = `
+      <div class="empty">
+        No transactions yet.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    transactions
+      .slice(0,10)
+      .map(transaction => {
+
+        const type =
+          transaction.type ||
+          "Transaction";
+
+        const amount =
+          money(
+            transaction.amount
+          );
+
+        const date =
+          transaction.createdAt
+            ? new Date(
+                transaction.createdAt
+              ).toLocaleString()
+            : "";
+
+        const positive =
+          [
+            "deposit",
+            "activation"
+          ].includes(
+            type.toLowerCase()
+          );
+
+
+        return `
+
+          <div class="transaction">
+
+            <div class="transaction-left">
+
+              <div class="transaction-icon">
+                ${positive ? "＋" : "↗"}
+              </div>
+
+              <div>
+
+                <div class="transaction-name">
+                  ${escapeHtml(type)}
+                </div>
+
+                <small class="transaction-date">
+                  ${escapeHtml(date)}
+                </small>
+
+              </div>
+
+            </div>
+
+            <div class="transaction-amount">
+              ${positive ? "+" : "-"}${amount}
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Activate wallet
+|--------------------------------------------------------------------------
+*/
+
+async function activateWallet(){
+
+  const button =
+    document.getElementById(
+      "activateBtn"
+    );
+
+
+  if(button.disabled)
+    return;
+
+
+  const confirmed =
+    confirm(
+      "Start wallet activation for KES 150? " +
+      "An M-Pesa prompt will be sent to your registered number."
+    );
+
+
+  if(!confirmed)
+    return;
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Sending M-Pesa prompt...";
+
+
+  try{
+
+    /*
+     * Backend gets the phone number
+     * from the authenticated user.
+     *
+     * The browser does NOT send a phone number.
+     */
+
+    const data =
+      await api(
+        "/api/payment/stkpush",
+        {
+          method:"POST",
+
+          body:JSON.stringify({
+            amount:150,
+
+            accountReference:
+              "EarnPulse",
+
+            transactionDesc:
+              "Wallet Activation"
+          })
+        }
+      );
+
+
+    alert(
+      data.message ||
+      "M-Pesa prompt sent. Check your phone."
+    );
+
+
+    button.textContent =
+      "Check your M-Pesa phone";
+
+
+  }catch(error){
+
+    alert(
+      error.message
+    );
+
+    button.disabled = false;
+
+    button.textContent =
+      "Activate Wallet — KES 150";
+
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HTML escaping
+|--------------------------------------------------------------------------
+*/
+
+function escapeHtml(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Start
+|--------------------------------------------------------------------------
+*/
+
+loadWallet();
+
+</script>
+
+</body>
+  </html>
