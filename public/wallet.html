@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet — Wincrash</title>
+<style>
+  :root{
+    --bg:#0b0f19;
+    --panel:#111827;
+    --panel-2:#161e2e;
+    --border:#232c3d;
+    --text:#e8ecf4;
+    --muted:#8792a6;
+    --lime:#a8ff3e;
+    --lime-dim:#7fd12b;
+    --red:#ff4d5e;
+    --amber:#ffb020;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    min-height:100vh;
+    display:flex;
+  }
+
+  /* ---- Sidebar (collapsed shell to match dashboard) ---- */
+  .sidebar{
+    width:72px;
+    background:var(--panel);
+    border-right:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px 0;
+    gap:24px;
+  }
+  .sidebar .logo{
+    width:36px;height:36px;border-radius:10px;
+    background:linear-gradient(135deg,var(--lime),var(--lime-dim));
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;color:#0b0f19;font-size:14px;
+  }
+  .sidebar .icon{
+    width:40px;height:40px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--muted);cursor:pointer;font-size:18px;
+  }
+  .sidebar .icon.active{background:var(--panel-2);color:var(--lime);}
+
+  /* ---- Main ---- */
+  .main{flex:1;padding:32px 24px;max-width:520px;margin:0 auto;width:100%;}
+  h1{font-size:20px;font-weight:700;margin-bottom:4px;}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:24px;}
+
+  .balance-card{
+    background:linear-gradient(135deg,var(--panel-2),var(--panel));
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:24px;
+    margin-bottom:20px;
+  }
+  .balance-label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em;}
+  .balance-amount{font-size:32px;font-weight:800;margin-top:6px;color:var(--lime);}
+  .balance-amount span{font-size:16px;color:var(--muted);font-weight:600;}
+
+  .tabs{display:flex;gap:8px;margin-bottom:20px;}
+  .tab{
+    flex:1;text-align:center;padding:10px;border-radius:10px;
+    background:var(--panel);border:1px solid var(--border);
+    color:var(--muted);font-weight:600;font-size:14px;cursor:pointer;
+    transition:.15s;
+  }
+  .tab.active{background:var(--lime);color:#0b0f19;border-color:var(--lime);}
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:22px;
+    display:none;
+  }
+  .panel.active{display:block;}
+
+  label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600;}
+  .field{margin-bottom:16px;}
+  .input-wrap{position:relative;}
+  .prefix{
+    position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    color:var(--muted);font-size:14px;font-weight:600;
+  }
+  input{
+    width:100%;
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 14px 14px 46px;
+    color:var(--text);
+    font-size:15px;
+    outline:none;
+    transition:.15s;
+  }
+  input:focus{border-color:var(--lime);}
+  input.phone-input{padding-left:14px;}
+
+  .quick-amounts{display:flex;gap:8px;margin-top:10px;}
+  .quick-amounts button{
+    flex:1;padding:8px;border-radius:8px;background:var(--panel-2);
+    border:1px solid var(--border);color:var(--muted);font-size:12px;
+    cursor:pointer;font-weight:600;
+  }
+  .quick-amounts button:hover{border-color:var(--lime);color:var(--lime);}
+
+  .btn{
+    width:100%;padding:15px;border-radius:12px;border:none;
+    font-weight:700;font-size:15px;cursor:pointer;margin-top:6px;
+    transition:.15s;
+  }
+  .btn-deposit{background:var(--lime);color:#0b0f19;}
+  .btn-deposit:hover{background:var(--lime-dim);}
+  .btn-withdraw{background:var(--text);color:#0b0f19;}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+
+  .status{
+    margin-top:16px;padding:14px;border-radius:10px;
+    font-size:13px;display:none;align-items:center;gap:10px;
+  }
+  .status.show{display:flex;}
+  .status.pending{background:rgba(255,176,32,.1);color:var(--amber);border:1px solid rgba(255,176,32,.3);}
+  .status.success{background:rgba(168,255,62,.1);color:var(--lime);border:1px solid rgba(168,255,62,.3);}
+  .status.error{background:rgba(255,77,94,.1);color:var(--red);border:1px solid rgba(255,77,94,.3);}
+
+  .spinner{
+    width:14px;height:14px;border-radius:50%;
+    border:2px solid rgba(255,176,32,.3);border-top-color:var(--amber);
+    animation:spin .7s linear infinite;flex-shrink:0;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .hint{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">W</div>
+  <div class="icon">🎮</div>
+  <div class="icon active">💰</div>
+  <div class="icon">📜</div>
+  <div class="icon">⚙️</div>
+</div>
+
+<div class="main">
+  <h1>Wallet</h1>
+  <p class="sub">Deposit or withdraw funds via M-Pesa</p>
+
+  <div class="balance-card">
+    <div class="balance-label">Available Balance</div>
+    <div class="balance-amount" id="balanceAmount">KES 0.00</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="deposit">Deposit</div>
+    <div class="tab" data-tab="withdraw">Withdraw</div>
+  </div>
+
+  <!-- DEPOSIT -->
+  <div class="panel active" id="panel-deposit">
+    <div class="field">
+      <label>M-Pesa Number</label>
+      <input type="tel" class="phone-input" id="depositPhone" placeholder="07XXXXXXXX">
+    </div>
+    <div class="field">
+      <label>Amount (KES)</label>
+      <div class="input-wrap">
+        <span class="prefix">KES</span>
+        <input type="number" id="depositAmount" placeholder="0" min="10" step="1">
+      </div>
+      <div class="quick-amounts">
+        <button type="button" data-amt="50">50</button>
+        <button type="button" data-amt="100">100</button>
+        <button type="button" data-amt="500">500</button>
+        <button type="button" data-amt="1000">1,000</button>
+      </div>
+    </div>
+    <button class="btn btn-deposit" id="depositBtn">Deposit via M-Pesa</button>
+    <div class="status" id="depositStatus"></div>
+    <p class="hint">You'll get an STK push prompt on your phone. Enter your M-Pesa PIN to complete.</p>
+  </div>
+
+  <!-- WITHDRAW -->
+  <div class="panel" id="panel-withdraw">
+    <div class="field">
+      <label>Amount (KES)</label>
+      <div class="input-wrap">
+        <span class="prefix">KES</span>
+        <input type="number" id="withdrawAmount" placeholder="0" min="50" step="1">
+      </div>
+    </div>
+    <div class="field">
+      <label>M-Pesa Number</label>
+      <input type="tel" class="phone-input" id="withdrawPhone" placeholder="07XXXXXXXX">
+    </div>
+    <button class="btn btn-withdraw" id="withdrawBtn">Withdraw to M-Pesa</button>
+    <div class="status" id="withdrawStatus"></div>
+    <p class="hint">Withdrawals are sent as M-Pesa B2C. Processing usually takes under a minute.</p>
+  </div>
+</div>
+
+<script>
+const API_BASE = '/api/wallet'; // adjust if your backend is on a different host/port
+const token = () => localStorage.getItem('wincrash_token'); // however you store the JWT
+
+function authHeaders(){
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token()}`
+  };
+}
+
+/* ---------- Tabs ---------- */
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(`panel-${tab.dataset.tab}`).classList.add('active');
+  });
+});
+
+/* ---------- Quick amounts ---------- */
+document.querySelectorAll('.quick-amounts button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.getElementById('depositAmount').value = btn.dataset.amt;
+  });
+});
+
+/* ---------- Balance ---------- */
+async function loadBalance(){
+  try{
+    const res = await fetch(`${API_BASE}/balance`, { headers: authHeaders() });
+    const data = await res.json();
+    if(res.ok){
+      document.getElementById('balanceAmount').innerHTML =
+        `KES ${Number(data.balance).toLocaleString('en-KE', {minimumFractionDigits:2})}`;
+    }
+  }catch(err){
+    console.error('Balance load failed', err);
+  }
+}
+loadBalance();
+
+/* ---------- Status helper ---------- */
+function setStatus(el, type, html){
+  el.className = `status show ${type}`;
+  el.innerHTML = html;
+}
+function clearStatus(el){
+  el.className = 'status';
+  el.innerHTML = '';
+}
+
+/* ---------- Phone normalization (shared by deposit + withdraw) ---------- */
+function normalizePhone(phone){
+  phone = phone.trim().replace(/\s+/g,'');
+  if(/^0\d{9}$/.test(phone)) return '254' + phone.slice(1);      // 07XXXXXXXX -> 2547XXXXXXXX
+  if(/^\+254\d{9}$/.test(phone)) return phone.slice(1);          // +254... -> 254...
+  if(/^254\d{9}$/.test(phone)) return phone;                     // already correct
+  return null;
+}
+
+/* ================= DEPOSIT — STK PUSH ================= */
+const depositBtn = document.getElementById('depositBtn');
+const depositStatus = document.getElementById('depositStatus');
+const depositPhoneInput = document.getElementById('depositPhone');
+
+// Prefill STK push phone with the account's registered phone
+(async function prefillDepositPhone(){
+  try{
+    const res = await fetch(`${API_BASE}/../auth/me`, { headers: authHeaders() });
+    const data = await res.json();
+    if(res.ok && data.phone){
+      depositPhoneInput.value = data.phone;
+    }
+  }catch(err){
+    // non-fatal, user can type it manually
+  }
+})();
+
+depositBtn.addEventListener('click', async ()=>{
+  const amount = Number(document.getElementById('depositAmount').value);
+  const rawPhone = depositPhoneInput.value;
+  const phone = normalizePhone(rawPhone);
+
+  if(!amount || amount < 10){
+    setStatus(depositStatus, 'error', 'Enter a valid amount (min KES 10).');
+    return;
+  }
+  if(!phone){
+    setStatus(depositStatus, 'error', 'Enter a valid Safaricom number, e.g. 0712345678.');
+    return;
+  }
+
+  depositBtn.disabled = true;
+  setStatus(depositStatus, 'pending', `<div class="spinner"></div><span>Sending STK push to ${rawPhone}...</span>`);
+
+  try{
+    // 1. Initiate STK push
+    const res = await fetch(`${API_BASE}/deposit`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ amount, phone })
+    });
+    const data = await res.json();
+
+    if(!res.ok){
+      throw new Error(data.message || 'Failed to initiate STK push');
+    }
+
+    // Backend should return the Daraja CheckoutRequestID so we can poll status
+    const checkoutRequestId = data.checkoutRequestId || data.CheckoutRequestID;
+    if(!checkoutRequestId){
+      throw new Error('No checkout reference returned from server');
+    }
+
+    setStatus(depositStatus, 'pending', '<div class="spinner"></div><span>Enter your M-Pesa PIN on your phone to confirm...</span>');
+
+    // 2. Poll for callback result
+    await pollDepositStatus(checkoutRequestId);
+
+  }catch(err){
+    setStatus(depositStatus, 'error', `⚠️ ${err.message}`);
+    depositBtn.disabled = false;
+  }
+});
+
+async function pollDepositStatus(checkoutRequestId){
+  const maxAttempts = 20;      // ~60s total
+  const intervalMs = 3000;
+
+  for(let attempt = 0; attempt < maxAttempts; attempt++){
+    await new Promise(r => setTimeout(r, intervalMs));
+
+    try{
+      const res = await fetch(`${API_BASE}/deposit/status/${checkoutRequestId}`, {
+        headers: authHeaders()
+      });
+      const data = await res.json();
+
+      if(data.status === 'success'){
+        setStatus(depositStatus, 'success', `✅ Deposit of KES ${data.amount} confirmed.`);
+        depositBtn.disabled = false;
+        document.getElementById('depositAmount').value = '';
+        loadBalance();
+        return;
+      }
+
+      if(data.status === 'failed' || data.status === 'cancelled'){
+        setStatus(depositStatus, 'error', `❌ ${data.message || 'Transaction was not completed.'}`);
+        depositBtn.disabled = false;
+        return;
+      }
+
+      // else still 'pending' — keep polling
+      setStatus(depositStatus, 'pending', `<div class="spinner"></div><span>Waiting for confirmation... (${attempt + 1}/${maxAttempts})</span>`);
+
+    }catch(err){
+      console.error('Poll error', err);
+      // keep trying unless it's the last attempt
+    }
+  }
+
+  setStatus(depositStatus, 'error', '⌛ Timed out waiting for confirmation. Check your transaction history — your deposit may still be processing.');
+  depositBtn.disabled = false;
+}
+
+/* ================= WITHDRAW — B2C ================= */
+const withdrawBtn = document.getElementById('withdrawBtn');
+const withdrawStatus = document.getElementById('withdrawStatus');
+const withdrawPhoneInput = document.getElementById('withdrawPhone');
+
+// Prefill withdrawal phone with the account's registered phone (phone-only JWT auth)
+(async function prefillPhone(){
+  try{
+    const res = await fetch(`${API_BASE}/../auth/me`, { headers: authHeaders() });
+    const data = await res.json();
+    if(res.ok && data.phone){
+      withdrawPhoneInput.value = data.phone;
+    }
+  }catch(err){
+    // non-fatal, user can type it manually
+  }
+})();
+
+withdrawBtn.addEventListener('click', async ()=>{
+  const amount = Number(document.getElementById('withdrawAmount').value);
+  const rawPhone = withdrawPhoneInput.value;
+  const phone = normalizePhone(rawPhone);
+
+  if(!amount || amount < 50){
+    setStatus(withdrawStatus, 'error', 'Enter a valid amount (min KES 50).');
+    return;
+  }
+  if(!phone){
+    setStatus(withdrawStatus, 'error', 'Enter a valid Safaricom number, e.g. 0712345678.');
+    return;
+  }
+
+  withdrawBtn.disabled = true;
+  setStatus(withdrawStatus, 'pending', '<div class="spinner"></div><span>Processing withdrawal...</span>');
+
+  try{
+    const res = await fetch(`${API_BASE}/withdraw`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ amount, phone })
+    });
+    const data = await res.json();
+
+    if(!res.ok){
+      throw new Error(data.message || 'Withdrawal failed');
+    }
+
+    setStatus(withdrawStatus, 'success', `✅ KES ${amount} is on its way to ${rawPhone}.`);
+    document.getElementById('withdrawAmount').value = '';
+    loadBalance();
+
+  }catch(err){
+    setStatus(withdrawStatus, 'error', `⚠️ ${err.message}`);
+  }finally{
+    withdrawBtn.disabled = false;
+  }
+});
+</script>
+
+</body>
+    </html>
+  
