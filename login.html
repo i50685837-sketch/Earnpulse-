@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EarnPulse • Login</title>
+
+<meta name="theme-color" content="#071a14">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Inter,Arial,sans-serif;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      #19c97855,
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      #08744344,
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #04120e,
+      #0a2a20
+    );
+
+  color:#fff;
+}
+
+.container{
+  width:100%;
+  max-width:420px;
+}
+
+/* BRAND */
+
+.brand{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.logo{
+  width:70px;
+  height:70px;
+  margin:0 auto 14px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #19c978,
+      #087443
+    );
+
+  font-size:30px;
+  font-weight:900;
+
+  box-shadow:
+    0 15px 40px #19c97830;
+}
+
+.brand h1{
+  font-size:28px;
+  letter-spacing:-1px;
+}
+
+.brand p{
+  color:#8faea2;
+  font-size:13px;
+  margin-top:6px;
+}
+
+/* CARD */
+
+.card{
+  padding:26px;
+
+  border-radius:26px;
+
+  background:#ffffff0b;
+  border:1px solid #ffffff16;
+
+  backdrop-filter:blur(18px);
+
+  box-shadow:
+    0 25px 70px #0007;
+}
+
+.card h2{
+  font-size:21px;
+  margin-bottom:7px;
+}
+
+.subtitle{
+  color:#91aaa1;
+  font-size:13px;
+  margin-bottom:25px;
+}
+
+/* FORM */
+
+label{
+  display:block;
+  font-size:13px;
+  color:#c7d8d2;
+  margin-bottom:8px;
+}
+
+.input-box{
+  position:relative;
+  margin-bottom:18px;
+}
+
+.input{
+  width:100%;
+  padding:15px 16px;
+
+  background:#04150f;
+
+  border:1px solid #ffffff18;
+  border-radius:15px;
+
+  outline:none;
+
+  color:#fff;
+
+  font-size:15px;
+
+  transition:.2s;
+}
+
+.input:focus{
+  border-color:#19c978;
+
+  box-shadow:
+    0 0 0 3px #19c97815;
+}
+
+.input::placeholder{
+  color:#5f776f;
+}
+
+/* PASSWORD */
+
+.password-wrap{
+  position:relative;
+}
+
+.password-wrap .input{
+  padding-right:52px;
+}
+
+.toggle{
+  position:absolute;
+
+  right:8px;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  width:38px;
+  height:38px;
+
+  border:0;
+  border-radius:10px;
+
+  background:#ffffff08;
+
+  color:#9fb8ae;
+
+  cursor:pointer;
+}
+
+/* OPTIONS */
+
+.options{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin:2px 0 20px;
+
+  font-size:12px;
+}
+
+.remember{
+  display:flex;
+  align-items:center;
+  gap:7px;
+
+  color:#91aaa1;
+}
+
+.remember input{
+  accent-color:#19c978;
+}
+
+.forgot{
+  color:#19c978;
+  text-decoration:none;
+}
+
+/* LOGIN */
+
+.login{
+  width:100%;
+
+  padding:16px;
+
+  border:0;
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #19c978,
+      #0c9e5b
+    );
+
+  color:#fff;
+
+  font-size:15px;
+  font-weight:800;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.login:hover{
+  transform:translateY(-1px);
+
+  box-shadow:
+    0 12px 30px #19c97830;
+}
+
+.login:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+/* DIVIDER */
+
+.divider{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  margin:23px 0;
+
+  color:#617b71;
+
+  font-size:11px;
+}
+
+.divider::before,
+.divider::after{
+  content:"";
+
+  flex:1;
+
+  height:1px;
+
+  background:#ffffff12;
+}
+
+/* REGISTER */
+
+.register{
+  text-align:center;
+
+  color:#8fa89f;
+
+  font-size:13px;
+}
+
+.register a{
+  color:#19c978;
+
+  font-weight:700;
+
+  text-decoration:none;
+}
+
+/* STATUS */
+
+.status{
+  display:none;
+
+  padding:12px 14px;
+
+  margin-bottom:17px;
+
+  border-radius:13px;
+
+  font-size:12px;
+
+  line-height:1.5;
+}
+
+.status.error{
+  display:block;
+
+  background:#ff4d4d12;
+
+  border:1px solid #ff555530;
+
+  color:#ffb0b0;
+}
+
+.status.success{
+  display:block;
+
+  background:#19c97812;
+
+  border:1px solid #19c97835;
+
+  color:#9af0c5;
+}
+
+/* FOOTER */
+
+.footer{
+  text-align:center;
+
+  margin-top:20px;
+
+  color:#506b61;
+
+  font-size:10px;
+}
+
+/* SPINNER */
+
+.spinner{
+  display:inline-block;
+
+  width:15px;
+  height:15px;
+
+  border:2px solid #ffffff55;
+  border-top-color:#fff;
+
+  border-radius:50%;
+
+  animation:spin .7s linear infinite;
+
+  vertical-align:middle;
+
+  margin-right:7px;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- BRAND -->
+
+  <div class="brand">
+
+    <div class="logo">
+      EP
+    </div>
+
+    <h1>EarnPulse</h1>
+
+    <p>
+      Smart earnings. Simple rewards.
+    </p>
+
+  </div>
+
+
+  <!-- LOGIN CARD -->
+
+  <div class="card">
+
+    <h2>
+      Welcome back
+    </h2>
+
+    <p class="subtitle">
+      Login to access your EarnPulse account.
+    </p>
+
+
+    <!-- STATUS -->
+
+    <div
+      id="status"
+      class="status">
+    </div>
+
+
+    <!-- FORM -->
+
+    <form id="loginForm">
+
+      <label>
+        Email or Phone
+      </label>
+
+      <div class="input-box">
+
+        <input
+          id="identifier"
+          class="input"
+          type="text"
+          placeholder="Email or phone number"
+          autocomplete="username"
+          required
+        >
+
+      </div>
+
+
+      <label>
+        Password
+      </label>
+
+      <div class="input-box password-wrap">
+
+        <input
+          id="password"
+          class="input"
+          type="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          required
+        >
+
+        <button
+          type="button"
+          class="toggle"
+          onclick="togglePassword()">
+
+          👁
+
+        </button>
+
+      </div>
+
+
+      <div class="options">
+
+        <label class="remember">
+
+          <input
+            type="checkbox"
+            id="remember">
+
+          Remember me
+
+        </label>
+
+        <a
+          href="forgot-password.html"
+          class="forgot">
+
+          Forgot password?
+
+        </a>
+
+      </div>
+
+
+      <button
+        id="loginBtn"
+        class="login"
+        type="submit">
+
+        Login
+
+      </button>
+
+    </form>
+
+
+    <div class="divider">
+      OR
+    </div>
+
+
+    <div class="register">
+
+      Don't have an account?
+
+      <a href="register.html">
+        Create account
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <div class="footer">
+    © 2026 EarnPulse
+  </div>
+
+</div>
+
+
+<script>
+
+/*
+|--------------------------------------------------------------------------
+| API
+|--------------------------------------------------------------------------
+|
+| If login.html is served by the same Express server,
+| leave this empty.
+|
+| If frontend and backend are separate:
+|
+| const API_URL = "https://your-backend-domain.com";
+|
+*/
+
+const API_URL = "";
+
+
+/*
+|--------------------------------------------------------------------------
+| Password visibility
+|--------------------------------------------------------------------------
+*/
+
+function togglePassword(){
+
+  const input =
+    document.getElementById(
+      "password"
+    );
+
+  input.type =
+    input.type === "password"
+      ? "text"
+      : "password";
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Status
+|--------------------------------------------------------------------------
+*/
+
+function showStatus(
+  message,
+  type
+){
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+  status.className =
+    "status " + type;
+
+  status.textContent =
+    message;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LOGIN
+|--------------------------------------------------------------------------
+*/
+
+document
+  .getElementById("loginForm")
+  .addEventListener(
+    "submit",
+    async function(event){
+
+      event.preventDefault();
+
+      const identifier =
+        document
+          .getElementById(
+            "identifier"
+          )
+          .value
+          .trim();
+
+      const password =
+        document
+          .getElementById(
+            "password"
+          )
+          .value;
+
+      const remember =
+        document
+          .getElementById(
+            "remember"
+          )
+          .checked;
+
+      const button =
+        document.getElementById(
+          "loginBtn"
+        );
+
+
+      if(!identifier || !password){
+
+        showStatus(
+          "Please enter your login details.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      button.disabled = true;
+
+      button.innerHTML =
+        '<span class="spinner"></span>Signing in...';
+
+
+      try{
+
+        /*
+         * Change this endpoint only if your
+         * auth route uses another path.
+         */
+
+        const response =
+          await fetch(
+            API_URL +
+            "/api/auth/login",
+            {
+              method:"POST",
+
+              headers:{
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:JSON.stringify({
+                identifier,
+                password
+              })
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if(
+          !response.ok ||
+          !data.success
+        ){
+
+          throw new Error(
+            data.message ||
+            "Invalid login details."
+          );
+
+        }
+
+
+        /*
+         * Expected backend response:
+         *
+         * {
+         *   success: true,
+         *   token: "...",
+         *   user: {...}
+         * }
+         */
+
+        if(!data.token){
+
+          throw new Error(
+            "Login succeeded but no authentication token was returned."
+          );
+
+        }
+
+
+        /*
+         * Store JWT
+         */
+
+        const storage =
+          remember
+            ? localStorage
+            : sessionStorage;
+
+
+        storage.setItem(
+          "token",
+          data.token
+        );
+
+
+        /*
+         * Optional user data
+         */
+
+        if(data.user){
+
+          storage.setItem(
+            "user",
+            JSON.stringify(
+              data.user
+            )
+          );
+
+        }
+
+
+        showStatus(
+          "Login successful. Redirecting...",
+          "success"
+        );
+
+
+        setTimeout(
+          () => {
+
+            window.location.href =
+              "dashboard.html";
+
+          },
+          500
+        );
+
+
+      }catch(error){
+
+        console.error(
+          "LOGIN ERROR:",
+          error
+        );
+
+        showStatus(
+          error.message ||
+          "Unable to connect to server.",
+          "error"
+        );
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "Login";
+
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+  </html>
